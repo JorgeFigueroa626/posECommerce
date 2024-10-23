@@ -6,6 +6,7 @@ import posECommerce.domain.entity.dto.OrderDto;
 import posECommerce.domain.entity.dto.PlaceOrderDto;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ICartService {
 
@@ -22,5 +23,7 @@ public interface ICartService {
     OrderDto placeOrder(PlaceOrderDto placeOrderDto);
 
     List<OrderDto> getMyPlaceOrders(Long userId);
+
+    OrderDto searchOrderByTrackingId(UUID trackingId);
 
 }

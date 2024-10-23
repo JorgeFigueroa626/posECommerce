@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import posECommerce.domain.entity.dto.AnalyticsResponse;
 import posECommerce.domain.entity.dto.OrderDto;
 import posECommerce.service.admin.IOrderService;
 
@@ -30,5 +31,10 @@ public class OrderController {
         if (orderDto == null)
             return  new ResponseEntity<>("Something went wrong", HttpStatus.BAD_REQUEST);
         return  ResponseEntity.status(HttpStatus.OK).body(orderDto);
+    }
+
+    @GetMapping("/analytics")
+    public ResponseEntity<AnalyticsResponse> getAnalytics(){
+        return ResponseEntity.ok(orderService.calculationAnalytics());
     }
 }
