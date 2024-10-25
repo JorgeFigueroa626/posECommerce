@@ -73,9 +73,11 @@ public class CartServiceImpl implements ICartService {
         }
     }
 
+    ////////////////xxxxxxxxxx
     public OrderDto getCartByUserId(Long userId){
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
         List<CartItemsDto> cartItemsDtosList = activeOrder.getCartItems().stream().map(CartItems::getCartDto).collect(Collectors.toList());
+
         OrderDto orderDto = new OrderDto();
         orderDto.setAmount(activeOrder.getAmount());
         orderDto.setId(activeOrder.getId());
@@ -83,6 +85,12 @@ public class CartServiceImpl implements ICartService {
         orderDto.setDiscount(activeOrder.getDiscount());
         orderDto.setTotalAmount(activeOrder.getTotalAmount());
         orderDto.setCartItems(cartItemsDtosList);
+        /*
+        if (activeOrder.getCoupon() != null) {
+            orderDto.setCouponName(activeOrder.getCoupon().getName());
+        }
+
+         */
 
         return orderDto;
     }
@@ -115,10 +123,10 @@ public class CartServiceImpl implements ICartService {
 
     public OrderDto increaseProductQuantity(AddProductInCartDto addProductInCartDto){
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(), OrderStatus.PENDING);
-        Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getUserId());
+        Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
 
         Optional<CartItems> optionalCartItems = cartItemsRepository.findByProductIdAndOrderIdAndUserId(
-                addProductInCartDto.getProductId(), activeOrder.getId(), addProductInCartDto.getProductId());
+                addProductInCartDto.getProductId(), activeOrder.getId(), addProductInCartDto.getUserId());
 
         if (optionalProduct.isPresent() && optionalCartItems.isPresent()) {
             CartItems cartItems = optionalCartItems.get();
@@ -146,10 +154,10 @@ public class CartServiceImpl implements ICartService {
 
     public OrderDto decreaseProductQuantity(AddProductInCartDto addProductInCartDto){
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(), OrderStatus.PENDING);
-        Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getUserId());
+        Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
 
         Optional<CartItems> optionalCartItems = cartItemsRepository.findByProductIdAndOrderIdAndUserId(
-                addProductInCartDto.getProductId(), activeOrder.getId(), addProductInCartDto.getProductId());
+                addProductInCartDto.getProductId(), activeOrder.getId(), addProductInCartDto.getUserId());
 
         if (optionalProduct.isPresent() && optionalCartItems.isPresent()) {
             CartItems cartItems = optionalCartItems.get();

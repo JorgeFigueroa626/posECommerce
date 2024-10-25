@@ -15,11 +15,11 @@ import java.util.Optional;
 public class UserDetailServiceImpl implements UserDetailsService {
 
     @Autowired
-    private IUserRepository IUserRepository;
+    private IUserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> optionalUser = IUserRepository.findFirstByEmail(username);
+        Optional<User> optionalUser = userRepository.findFirstByEmail(username);
         if (optionalUser.isEmpty()) throw new UsernameNotFoundException("Username not found", null);
         return new org.springframework.security.core.userdetails.User(optionalUser.get().getEmail(), optionalUser.get().getPassword(), new ArrayList<>());
     }

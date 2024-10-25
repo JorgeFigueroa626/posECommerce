@@ -37,7 +37,7 @@ public class AuthController {
     private UserDetailServiceImpl userDetailService;
 
     @Autowired
-    private IUserRepository IUserRepository;
+    private IUserRepository userRepository;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -59,13 +59,14 @@ public class AuthController {
         }
 
         final UserDetails userDetails = userDetailService.loadUserByUsername(request.getUsername());
-        Optional<User> optionalUser =  IUserRepository.findFirstByEmail(userDetails.getUsername());
+        Optional<User> optionalUser =  userRepository.findFirstByEmail(userDetails.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
 
         if (optionalUser.isPresent()) {
             response.getWriter().write(new JSONObject()
                     .put("userId", optionalUser.get().getId())
                     .put("role", optionalUser.get().getRole())
+                    .put("token", jwt)
                     .toString()
             );
 

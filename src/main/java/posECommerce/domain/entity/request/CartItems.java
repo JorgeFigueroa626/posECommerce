@@ -8,6 +8,7 @@ import posECommerce.domain.entity.dto.CartItemsDto;
 
 @Entity
 @Data
+@Table(name = "cart_items")
 public class CartItems {
 
     @Id

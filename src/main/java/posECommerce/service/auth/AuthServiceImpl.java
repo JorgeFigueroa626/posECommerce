@@ -52,6 +52,7 @@ public class AuthServiceImpl implements IAuthService {
         return userRepository.findFirstByEmail(email).isPresent();
     }
 
+    //CREA AUTOMÁTICAMENTE EL USUARIO ADMIN CON SU ROL
     @PostConstruct
     public void createAdminAccount() {
         User adminAccount = userRepository.findByRole(Role.ADMIN);

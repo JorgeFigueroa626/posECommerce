@@ -50,7 +50,7 @@ public class ProductController {
     }
 
 
-    @PostMapping("/faq/{productId}")
+    @PostMapping("/product/faq/{productId}")
     public ResponseEntity<FaqDto> createFaq(@PathVariable Long productId, @RequestBody FaqDto faqDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(faqService.createFAQ(productId, faqDto));
     }

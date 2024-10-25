@@ -60,7 +60,7 @@ public class ReviewServiceImp implements IReviewService {
         Optional<Product> optionalProduct = productRepository.findById(reviewDto.getProductId());
         Optional<User> optionalUser = userRepository.findById(reviewDto.getUserId());
 
-        if (optionalUser.isPresent() && optionalUser.isPresent()) {
+        if (optionalProduct.isPresent() && optionalUser.isPresent()) {
             Review review = new Review();
             review.setRating(reviewDto.getRating());
             review.setDescription(reviewDto.getDescription());

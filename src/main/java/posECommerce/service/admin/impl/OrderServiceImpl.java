@@ -21,7 +21,7 @@ public class OrderServiceImpl implements IOrderService {
     private IOrderRepository orderRepository;
 
     public List<OrderDto> getAllPlaceOrders(){
-        List<Order> orderList = orderRepository.findAllByOrderStatusIn(List.of(OrderStatus.PLACED, OrderStatus.SHIPPED, OrderStatus.DELIVERED, OrderStatus.PENDING));
+        List<Order> orderList = orderRepository.findAllByOrderStatusIn(List.of(OrderStatus.PLACED, OrderStatus.SHIPPED, OrderStatus.DELIVERED));
         return  orderList.stream().map(Order::getOrderDto).collect(Collectors.toList());
     }
 
