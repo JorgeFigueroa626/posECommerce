@@ -6,12 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import posECommerce.domain.entity.dto.OrderedProductsResponseDto;
 import posECommerce.domain.entity.dto.ReviewDto;
-import posECommerce.service.customer.IReviewService;
+import posECommerce.service.IReviewService;
 
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/customer")
+@RequestMapping("/api")
 public class ReviewController {
 
     @Autowired
@@ -26,6 +26,16 @@ public class ReviewController {
     public ResponseEntity<?> giveReview(@ModelAttribute ReviewDto reviewDto) throws IOException {
         ReviewDto reviewDto1 = reviewService.giveReview(reviewDto);
         if (reviewDto1 == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong");
-        return ResponseEntity.status(HttpStatus.CREATED).body(reviewDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(reviewDto1);
     }
+
+    /*
+    @PostMapping("/review")
+    public ResponseEntity<?> giveReview(@ModelAttribute ReviewDto reviewDto) throws IOException {
+        Boolean success = reviewService.giveReview(reviewDto);
+        if (!success) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong");
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+     */
 }

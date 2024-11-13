@@ -1,4 +1,4 @@
-package posECommerce.service.customer;
+package posECommerce.service;
 
 import posECommerce.domain.entity.dto.WishlistDto;
 

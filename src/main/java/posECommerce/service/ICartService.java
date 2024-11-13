@@ -1,9 +1,10 @@
-package posECommerce.service.customer;
+package posECommerce.service;
 
 import org.springframework.http.ResponseEntity;
 import posECommerce.domain.entity.dto.AddProductInCartDto;
 import posECommerce.domain.entity.dto.OrderDto;
 import posECommerce.domain.entity.dto.PlaceOrderDto;
+import posECommerce.domain.entity.request.CartItems;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,6 +12,8 @@ import java.util.UUID;
 public interface ICartService {
 
     ResponseEntity<?> addProductToCart(AddProductInCartDto addProductInCartDto);
+
+    List<CartItems> findAllCarts();
 
     OrderDto getCartByUserId(Long userId);
 

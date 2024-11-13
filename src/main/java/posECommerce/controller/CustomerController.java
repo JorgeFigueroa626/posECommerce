@@ -8,17 +8,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import posECommerce.domain.entity.dto.ProductDetailDto;
 import posECommerce.domain.entity.dto.ProductDto;
-import posECommerce.service.customer.ICustomerProductService;
+import posECommerce.service.ICustomerProductService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customers")
+//@RequestMapping("/api/customers")
 public class CustomerController {
 
     @Autowired
     private ICustomerProductService customerProductService;
 
+     /*
     @GetMapping
     public ResponseEntity<List<ProductDto>> getAllProducts(){
         List<ProductDto> productDtos = customerProductService.getAllProducts();
@@ -31,6 +32,7 @@ public class CustomerController {
          return ResponseEntity.ok(productDto);
     }
 
+
     @GetMapping("/product/{productId}")
     public ResponseEntity<ProductDetailDto> getProductDetailById(@PathVariable Long productId){
         ProductDetailDto productDetailDto = customerProductService.getProductDetailById(productId);
@@ -39,5 +41,7 @@ public class CustomerController {
         }
         return ResponseEntity.ok(productDetailDto);
     }
+
+     */
 
 }

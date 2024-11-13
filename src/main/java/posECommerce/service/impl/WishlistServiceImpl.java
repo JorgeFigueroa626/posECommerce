@@ -1,4 +1,4 @@
-package posECommerce.service.customer.impl;
+package posECommerce.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +9,7 @@ import posECommerce.domain.entity.request.Wishlist;
 import posECommerce.repository.IProductRepository;
 import posECommerce.repository.IUserRepository;
 import posECommerce.repository.IWishlistRepository;
-import posECommerce.service.customer.IWishlistService;
+import posECommerce.service.IWishlistService;
 
 import java.util.List;
 import java.util.Optional;

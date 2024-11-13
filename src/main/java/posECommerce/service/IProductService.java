@@ -1,8 +1,7 @@
-package posECommerce.service.admin;
+package posECommerce.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import posECommerce.domain.entity.dto.ProductDetailDto;
 import posECommerce.domain.entity.dto.ProductDto;
-import posECommerce.repository.IProductRepository;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,6 +13,14 @@ public interface IProductService {
     public List<ProductDto> findAllProduct();
 
     public List<ProductDto> findAllProductByName(String name);
+
+    /*
+    public List<ProductDto> getAllProducts();
+    public List<ProductDto> getAllProductsByTitle(String name);
+
+     */
+
+    public ProductDetailDto getProductDetailById(Long productId);
 
     public boolean deleteByProductId(Long id);
 

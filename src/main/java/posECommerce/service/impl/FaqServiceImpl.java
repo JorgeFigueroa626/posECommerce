@@ -1,4 +1,4 @@
-package posECommerce.service.admin.impl;
+package posECommerce.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,7 +7,7 @@ import posECommerce.domain.entity.request.FAQ;
 import posECommerce.domain.entity.request.Product;
 import posECommerce.repository.IFaqRepository;
 import posECommerce.repository.IProductRepository;
-import posECommerce.service.admin.IFaqService;
+import posECommerce.service.IFaqService;
 
 import java.util.Optional;
 

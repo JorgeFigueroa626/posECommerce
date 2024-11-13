@@ -1,6 +1,7 @@
 package posECommerce.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    @Autowired
+    private  JwtAuthenticationEntryPoint unauthorizedHandler;
     private final JwtRequestFilter authFilter;
 
     @Bean
@@ -28,6 +31,9 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/api/**")
                         .authenticated()
+                )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(unauthorizedHandler)
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -1,4 +1,4 @@
-package posECommerce.service.admin.impl;
+package posECommerce.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,7 +7,7 @@ import posECommerce.domain.entity.dto.OrderDto;
 import posECommerce.domain.entity.request.Order;
 import posECommerce.domain.enums.OrderStatus;
 import posECommerce.repository.IOrderRepository;
-import posECommerce.service.admin.IOrderService;
+import posECommerce.service.IOrderService;
 
 import java.time.LocalDate;
 
@@ -21,7 +21,7 @@ public class OrderServiceImpl implements IOrderService {
     private IOrderRepository orderRepository;
 
     public List<OrderDto> getAllPlaceOrders(){
-        List<Order> orderList = orderRepository.findAllByOrderStatusIn(List.of(OrderStatus.PLACED, OrderStatus.SHIPPED, OrderStatus.DELIVERED));
+        List<Order> orderList = orderRepository.findAllByOrderStatusIn(List.of(OrderStatus.PLACED, OrderStatus.SHIPPED, OrderStatus.DELIVERED, OrderStatus.PENDING));
         return  orderList.stream().map(Order::getOrderDto).collect(Collectors.toList());
     }
 
@@ -32,7 +32,7 @@ public class OrderServiceImpl implements IOrderService {
 
             if (Objects.equals(status, "SHIPPED")) {
                 order.setOrderStatus(OrderStatus.SHIPPED);
-            } else if (Objects.equals(status, "DELIVERED")) {
+            }else if (Objects.equals(status, "DELIVERED")) {
                 order.setOrderStatus(OrderStatus.DELIVERED);
             }
             return orderRepository.save(order).getOrderDto();

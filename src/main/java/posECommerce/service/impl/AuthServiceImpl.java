@@ -1,4 +1,4 @@
-package posECommerce.service.auth;
+package posECommerce.service.impl;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ import posECommerce.repository.IOrderRepository;
 import posECommerce.repository.IUserRepository;
 import posECommerce.domain.entity.dto.SignupRequest;
 import posECommerce.domain.entity.dto.UserDto;
+import posECommerce.service.IAuthService;
 
 @Service
 public class AuthServiceImpl implements IAuthService {

@@ -1,4 +1,4 @@
-package posECommerce.service.customer.impl;
+package posECommerce.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,7 @@ import posECommerce.domain.entity.request.*;
 import posECommerce.domain.enums.OrderStatus;
 import posECommerce.exception.ValidationException;
 import posECommerce.repository.*;
-import posECommerce.service.customer.ICartService;
+import posECommerce.service.ICartService;
 
 import java.util.Date;
 import java.util.List;
@@ -40,7 +40,7 @@ public class CartServiceImpl implements ICartService {
 
     @Override
     public ResponseEntity<?> addProductToCart(AddProductInCartDto addProductInCartDto) {
-        Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(), OrderStatus.PENDING);
+        Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(), OrderStatus.SHIPPED);
         Optional<CartItems> optionalCartItems = cartItemsRepository.findByProductIdAndOrderIdAndUserId(
                 addProductInCartDto.getProductId(), activeOrder.getId(), addProductInCartDto.getUserId());
 
@@ -73,9 +73,21 @@ public class CartServiceImpl implements ICartService {
         }
     }
 
+    @Override
+    public List<CartItems> findAllCarts() {
+        return cartItemsRepository.findAll();
+    }
+
     ////////////////xxxxxxxxxx
+    @Override
     public OrderDto getCartByUserId(Long userId){
-        Order activeOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
+        Order activeOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.SHIPPED);
+        // Verificar si activeOrder es null
+        if (activeOrder == null) {
+            // Manejar el caso en que no hay un pedido activo
+            // Puedes lanzar una excepción, devolver un objeto vacío, o manejarlo como desees
+            throw new RuntimeException("No active order found for user with ID: " + userId);
+        }
         List<CartItemsDto> cartItemsDtosList = activeOrder.getCartItems().stream().map(CartItems::getCartDto).collect(Collectors.toList());
 
         OrderDto orderDto = new OrderDto();
@@ -85,16 +97,10 @@ public class CartServiceImpl implements ICartService {
         orderDto.setDiscount(activeOrder.getDiscount());
         orderDto.setTotalAmount(activeOrder.getTotalAmount());
         orderDto.setCartItems(cartItemsDtosList);
-        /*
-        if (activeOrder.getCoupon() != null) {
-            orderDto.setCouponName(activeOrder.getCoupon().getName());
-        }
-
-         */
-
         return orderDto;
     }
 
+    @Override
     public OrderDto applyCoupon(Long userId, String code){
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
         Coupon coupon = couponRepository.findByCode(code).orElseThrow(() -> new ValidationException("Coupon not found"));
@@ -103,7 +109,7 @@ public class CartServiceImpl implements ICartService {
             throw new ValidationException("Coupon expired");
         }
 
-        double discountAmount = ((coupon.getDiscount()) / 100.0) * activeOrder.getTotalAmount();
+        double discountAmount = ((coupon.getDiscount() / 100.0) * activeOrder.getTotalAmount());
         double netAmount = activeOrder.getTotalAmount() - discountAmount;
 
         activeOrder.setAmount((long)netAmount);
@@ -121,6 +127,7 @@ public class CartServiceImpl implements ICartService {
         return expiredDate != null && currentDate.after(expiredDate);
     }
 
+    @Override
     public OrderDto increaseProductQuantity(AddProductInCartDto addProductInCartDto){
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(), OrderStatus.PENDING);
         Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
@@ -138,7 +145,7 @@ public class CartServiceImpl implements ICartService {
             cartItems.setQuantity(cartItems.getQuantity() + 1);
 
             if (activeOrder.getCoupon() != null) {
-                double discountAmount = ((activeOrder.getCoupon().getDiscount()) / 100.0) * activeOrder.getTotalAmount();
+                double discountAmount = ((activeOrder.getCoupon().getDiscount() / 100.0) * activeOrder.getTotalAmount());
                 double netAmount = activeOrder.getTotalAmount() - discountAmount;
 
                 activeOrder.setAmount((long)netAmount);
@@ -152,6 +159,7 @@ public class CartServiceImpl implements ICartService {
         return null;
     }
 
+    @Override
     public OrderDto decreaseProductQuantity(AddProductInCartDto addProductInCartDto){
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(), OrderStatus.PENDING);
         Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
@@ -169,7 +177,7 @@ public class CartServiceImpl implements ICartService {
             cartItems.setQuantity(cartItems.getQuantity() - 1);
 
             if (activeOrder.getCoupon() != null) {
-                double discountAmount = ((activeOrder.getCoupon().getDiscount()) / 100.0) * activeOrder.getTotalAmount();
+                double discountAmount = ((activeOrder.getCoupon().getDiscount() / 100.0) * activeOrder.getTotalAmount());
                 double netAmount = activeOrder.getTotalAmount() - discountAmount;
 
                 activeOrder.setAmount((long)netAmount);
@@ -183,6 +191,7 @@ public class CartServiceImpl implements ICartService {
         return null;
     }
 
+    @Override
     public OrderDto placeOrder(PlaceOrderDto placeOrderDto){
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(placeOrderDto.getUserId(), OrderStatus.PENDING);
         Optional<User> optionalUser = userRepository.findById(placeOrderDto.getUserId());
@@ -208,9 +217,10 @@ public class CartServiceImpl implements ICartService {
         return null;
     }
 
+    @Override
     public List<OrderDto> getMyPlaceOrders(Long userId){
-        return orderRepository.findByUserIdAndOrderStatusIn(userId, List.of(OrderStatus.PLACED, OrderStatus.SHIPPED,
-                OrderStatus.DELIVERED)).stream().map(Order::getOrderDto).collect(Collectors.toList());
+        List<OrderStatus> orderStatusList = List.of(OrderStatus.PLACED, OrderStatus.SHIPPED, OrderStatus.DELIVERED);
+        return orderRepository.findByUserIdAndOrderStatusIn(userId, orderStatusList).stream().map(Order::getOrderDto).collect(Collectors.toList());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package posECommerce.service.auth;
+package posECommerce.service;
 
 import posECommerce.domain.entity.dto.SignupRequest;
 import posECommerce.domain.entity.dto.UserDto;

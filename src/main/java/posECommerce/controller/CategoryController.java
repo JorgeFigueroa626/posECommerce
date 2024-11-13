@@ -7,12 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import posECommerce.domain.entity.dto.CategoryDto;
 import posECommerce.domain.entity.request.Category;
-import posECommerce.service.admin.ICategoryService;
+import posECommerce.service.ICategoryService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class CategoryController {
 
@@ -30,9 +30,35 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/categorys")
+    @GetMapping("/categories")
     public ResponseEntity<List<Category>> findAllCategory(){
         return ResponseEntity.ok(categoryService.findAllCategory());
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<Category> getByCategoryId(@PathVariable Long categoryId){
+        if (categoryId != null) {
+            return ResponseEntity.ok(categoryService.getByCategoryId(categoryId));
+        }else {
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
+
+    @PutMapping("/category/{categoryId}")
+    public ResponseEntity<Category> updateCategory(@PathVariable Long categoryId, @RequestBody Category category){
+        Category update = categoryService.updateByCategoryId(categoryId, category);
+        if (update != null) {
+            return ResponseEntity.ok(update);
+        }else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping("/category/{categoryId}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId){
+        categoryService.deleteByCategoryId(categoryId);
+        return ResponseEntity.noContent().build();
     }
 
 }

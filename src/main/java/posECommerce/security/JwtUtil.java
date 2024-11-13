@@ -24,9 +24,9 @@ public class JwtUtil {
     @Value("${jwt.key.expiration}")
     private int TIME_KEY;
 
-    public String generateToken(String username){
+    public String generateToken(UserDetails username){
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims,username);
+        return createToken(claims,username.getUsername());
     }
 
     private String createToken(Map<String, Object> claims, String username){

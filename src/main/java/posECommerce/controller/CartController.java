@@ -1,6 +1,5 @@
 package posECommerce.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,8 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import posECommerce.domain.entity.dto.AddProductInCartDto;
 import posECommerce.domain.entity.dto.OrderDto;
 import posECommerce.domain.entity.dto.PlaceOrderDto;
+import posECommerce.domain.entity.request.CartItems;
 import posECommerce.exception.ValidationException;
-import posECommerce.service.customer.ICartService;
+import posECommerce.service.ICartService;
 
 import java.util.List;
 
@@ -25,10 +25,21 @@ public class CartController {
         return cartService.addProductToCart(addProductInCartDto);
     }
 
+    @GetMapping("/carts")
+    public ResponseEntity<List<CartItems>> findAllCarts(){
+        List<CartItems> cartItems = cartService.findAllCarts();
+        return ResponseEntity.ok(cartItems);
+    }
+
     @GetMapping("/cart/{userId}")
     public ResponseEntity<?> getCartByUserId(@PathVariable Long userId){
-        OrderDto orderDto = cartService.getCartByUserId(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(orderDto);
+        try {
+            OrderDto orderDto = cartService.getCartByUserId(userId);
+            return ResponseEntity.status(HttpStatus.OK).body(orderDto);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @PostMapping("/cart/addition")
@@ -51,9 +62,14 @@ public class CartController {
         }
     }
 
-    @PostMapping("/placeOrder")
+    @PostMapping("/cart/placeOrder")
     public ResponseEntity<OrderDto> placeOrder(@RequestBody PlaceOrderDto placeOrderDto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(cartService.placeOrder(placeOrderDto));
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(cartService.placeOrder(placeOrderDto));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
     }
 
     @GetMapping("/myOrders/{userId}")

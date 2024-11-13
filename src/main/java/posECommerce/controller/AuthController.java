@@ -21,7 +21,7 @@ import posECommerce.domain.entity.dto.AuthenticationRequest;
 import posECommerce.domain.entity.dto.SignupRequest;
 import posECommerce.domain.entity.dto.UserDto;
 import posECommerce.security.UserDetailServiceImpl;
-import posECommerce.service.auth.IAuthService;
+import posECommerce.service.IAuthService;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -60,15 +60,30 @@ public class AuthController {
 
         final UserDetails userDetails = userDetailService.loadUserByUsername(request.getUsername());
         Optional<User> optionalUser =  userRepository.findFirstByEmail(userDetails.getUsername());
-        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+        final String jwt = jwtUtil.generateToken(userDetails);
 
         if (optionalUser.isPresent()) {
+            /*
             response.getWriter().write(new JSONObject()
                     .put("userId", optionalUser.get().getId())
                     .put("role", optionalUser.get().getRole())
                     .put("token", jwt)
                     .toString()
             );
+
+             */
+
+            JSONObject responseJson = new JSONObject();
+            responseJson.put("userId", optionalUser.get().getId());
+            responseJson.put("role", optionalUser.get().getRole());
+            responseJson.put("token", jwt);
+
+            // Establecer el tipo de contenido a JSON
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(responseJson.toString());
+
+
 
             response.addHeader("Access-Control-Expose-Headers", "Authorization");
             response.addHeader("Access-Control-Allow-Headers", "Authorization, X-PINGOTHER, Origin, " +

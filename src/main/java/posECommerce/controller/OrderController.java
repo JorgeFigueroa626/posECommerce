@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import posECommerce.domain.entity.dto.AnalyticsResponse;
 import posECommerce.domain.entity.dto.OrderDto;
-import posECommerce.service.admin.IOrderService;
+import posECommerce.service.IOrderService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/order")
+@RequestMapping("/api/order")
 public class OrderController {
 
     @Autowired

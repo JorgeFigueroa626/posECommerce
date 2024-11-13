@@ -1,4 +1,4 @@
-package posECommerce.service.customer.impl;
+package posECommerce.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import posECommerce.repository.IOrderRepository;
 import posECommerce.repository.IProductRepository;
 import posECommerce.repository.IReviewRepository;
 import posECommerce.repository.IUserRepository;
-import posECommerce.service.customer.IReviewService;
+import posECommerce.service.IReviewService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,4 +71,23 @@ public class ReviewServiceImp implements IReviewService {
         }
         return null;
     }
+    /*
+    public Boolean giveReview(ReviewDto reviewDto) throws IOException {
+        Optional<Product> optionalProduct = productRepository.findById(reviewDto.getProductId());
+        Optional<User> optionalUser = userRepository.findById(reviewDto.getUserId());
+
+        if (optionalProduct.isPresent() && optionalUser.isPresent()) {
+            Review review = new Review();
+            review.setRating(reviewDto.getRating());
+            review.setDescription(reviewDto.getDescription());
+            review.setUser(optionalUser.get());
+            review.setProduct(optionalProduct.get());
+            review.setImg(reviewDto.getImg().getBytes());
+            return reviewRepository.save(review);
+            return true;
+        }
+        return null;
+    }
+
+     */
 }

@@ -1,4 +1,4 @@
-package posECommerce.service.admin;
+package posECommerce.service;
 
 import posECommerce.domain.entity.dto.AnalyticsResponse;
 import posECommerce.domain.entity.dto.OrderDto;
