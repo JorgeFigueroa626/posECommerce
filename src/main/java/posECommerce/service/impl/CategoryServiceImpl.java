@@ -19,6 +19,7 @@ public class CategoryServiceImpl implements ICategoryService {
     public Category createCategory(CategoryDto categoryDto) {
         Category category = new Category();
         category.setName(categoryDto.getName());
+        category.setImage(categoryDto.getImage());
         category.setDescriptions(categoryDto.getDescriptions());
 
         return  categoryRepository.save(category);
@@ -40,6 +41,7 @@ public class CategoryServiceImpl implements ICategoryService {
         if (update != null) {
             update.setId(category.getId());
             update.setName(category.getName());
+            update.setImage(category.getImage());
             update.setDescriptions(category.getDescriptions());
 
             return categoryRepository.save(update);
